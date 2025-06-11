@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Responsive Review Redirect</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      background: #f9f9f9;
+    }
+    .main-container {
+      background-color: rgb(235,235,235);
+      max-width: 600px;
+      width: 600px;
+      padding: 30px 60px 80px;
+    }
+    .logo-container {
+        text-align: center;
+    }
+    .logo {
+      width: 20vw;
+      max-width: 120px;
+      height: auto;
+      margin-bottom: 20px;
+    }
+
+    hr {
+      width: 90%;
+      margin: 20px 0;
+      border: none;
+      border-top: 1px solid #ccc;
+    }
+
+    .review-text {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #0074a2;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .stars {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      font-size: 2.5rem;
+      cursor: pointer;
+      flex-wrap: wrap;
+    }
+
+    .star {
+      color: #ccc;
+      transition: color 0.3s;
+    }
+
+    .star.hovered,
+    .star.selected {
+      color: gold;
+    }
+
+    @media (max-width: 600px) {
+      .review-text {
+        font-size: 1.2rem;
+      }
+
+      .stars {
+        font-size: 2rem;
+        gap: 8px;
+      }
+
+      .logo {
+        width: 30vw;
+        max-width: 100px;
+      }
+    }    
+  </style>
+</head>
+<body>
+  <div class="main-container">
+    <div class="logo-container">
+      <img class="logo" src="https://albiware.com/wp-content/uploads/BlueIcon_BlackAlbiText.svg" alt="Company Logo">
+    </div>
+    
+  <hr>
+
+  <div class="review-text">Leave Us a Review</div>
+
+  <div class="stars" id="starContainer">
+    <span class="star" data-value="1">&#9733;</span>
+    <span class="star" data-value="2">&#9733;</span>
+    <span class="star" data-value="3">&#9733;</span>
+    <span class="star" data-value="4">&#9733;</span>
+    <span class="star" data-value="5">&#9733;</span>
+  </div>
+  <!--https://search.google.com/local/writereview?placeid=ChIJhcumhMpNDogRFHY3RnzAHDo-->
+  </div>
+  <script>
+    const stars = document.querySelectorAll(".star");
+
+    stars.forEach(star => {
+      star.addEventListener("mouseover", () => {
+        const val = parseInt(star.dataset.value);
+        stars.forEach(s => s.classList.remove("hovered"));
+        for (let i = 0; i < val; i++) {
+          stars[i].classList.add("hovered");
+        }
+      });
+
+      star.addEventListener("mouseout", () => {
+        stars.forEach(s => s.classList.remove("hovered"));
+      });
+
+      star.addEventListener("click", () => {
+        const rating = parseInt(star.dataset.value);
+        stars.forEach(s => s.classList.remove("selected"));
+        for (let i = 0; i < rating; i++) {
+          stars[i].classList.add("selected");
+        }
+        //Redirect Query
+        const urlParams = new URLSearchParams(window.location.search);
+        const high = urlParams.get("high");
+        const low = urlParams.get("low");
+        // Conditional redirect
+        if (rating >= 4) {
+          window.location.href = high;
+        } else {
+          window.location.href = low;
+        }
+      });
+    });
+  </script>
+</body>
+</html>
